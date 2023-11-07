@@ -1,0 +1,85 @@
+#include <iostream>
+#include <queue>
+#include <unordered_map>
+#include <vector>
+#include <string>
+#include <bitset>
+
+using namespace std;
+
+struct Node {
+    char data;
+    int frequency;
+    Node* left;
+    Node* right;
+
+    Node(char data, int frequency) : data(data), frequency(frequency), left(nullptr), right(nullptr) {}
+};
+
+struct CompareNodes {
+    bool operator()(Node* a, Node* b) {
+        return a->frequency > b->frequency;
+    }
+};
+
+void generateHuffmanCodes(Node* root, string code, unordered_map<char, string>& huffmanCodes) {
+    if (root->left == nullptr && root->right == nullptr) {
+        huffmanCodes[root->data] = code;
+        return;
+    }
+
+    if (root->left != nullptr) {
+        generateHuffmanCodes(root->left, code + "0", huffmanCodes);
+    }
+    if (root->right != nullptr) {
+        generateHuffmanCodes(root->right, code + "1", huffmanCodes);
+    }
+}
+
+void huffmanEncoding(string text) {
+    unordered_map<char, int> frequencyMap;
+    for (char c : text) {
+        frequencyMap[c]++;
+    }
+
+    priority_queue<Node*, vector<Node*>, CompareNodes> minHeap;
+    for (const auto& entry : frequencyMap) {
+        minHeap.push(new Node(entry.first, entry.second));
+    }
+
+    while (minHeap.size() > 1) {
+        Node* left = minHeap.top();
+        minHeap.pop();
+        Node* right = minHeap.top();
+        minHeap.pop();
+
+        int sumFrequency = left->frequency + right->frequency;
+        Node* newNode = new Node('\0', sumFrequency);
+        newNode->left = left;
+        newNode->right = right;
+        minHeap.push(newNode);
+    }
+
+    Node* root = minHeap.top();
+    unordered_map<char, string> huffmanCodes;
+    generateHuffmanCodes(root, "", huffmanCodes);
+
+    cout << "Huffman Codes:" << endl;
+    for (const auto& entry : huffmanCodes) {
+        cout << entry.first << ": " << entry.second << endl;
+    }
+
+    // cout << "Encoded Text:" << endl;
+    // string encodedText = "";
+    // for (char c : text) {
+    //     encodedText += huffmanCodes[c];
+    // }
+    // cout << encodedText << endl;
+}
+
+int main() {
+    string text = "this is an example for huffman encoding";
+    huffmanEncoding(text);
+
+    return 0;
+}

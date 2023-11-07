@@ -1,0 +1,75 @@
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+// Function to partition the array and return the pivot index
+int partition(vector<int>& arr, int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+
+    for (int j = low; j < high; j++) {
+        if (arr[j] <= pivot) {
+            i++;
+            swap(arr[i], arr[j]);
+        }
+    }
+
+    swap(arr[i + 1], arr[high]);
+    return i + 1;
+}
+
+// Function to implement deterministic Quick Sort
+int deterministicQuickSort(vector<int>& arr, int low, int high) {
+    if (low < high) {
+        int pivot = partition(arr, low, high);
+        int comparisons = high - low;
+        comparisons += deterministicQuickSort(arr, low, pivot - 1);
+        comparisons += deterministicQuickSort(arr, pivot + 1, high);
+        return comparisons;
+    }
+    return 0;
+}
+
+// Function to choose a random pivot and implement randomized Quick Sort
+int randomizedQuickSort(vector<int>& arr, int low, int high) {
+    if (low < high) {
+        // Randomly choose a pivot index within the range [low, high]
+        int randomIndex = low + rand() % (high - low + 1);
+        swap(arr[randomIndex], arr[high]);
+
+        int pivot = partition(arr, low, high);
+        int comparisons = high - low;
+        comparisons += randomizedQuickSort(arr, low, pivot - 1);
+        comparisons += randomizedQuickSort(arr, pivot + 1, high);
+        return comparisons;
+    }
+    return 0;
+}
+
+int main() {
+    srand(time(0));  // Seed the random number generator
+
+    int n;
+    cout << "Enter the size of the array: ";
+    cin >> n;
+
+    vector<int> arr(n);
+    cout << "Enter the array elements: ";
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+
+    vector<int> deterministicArray = arr; // Copy of the original array for deterministic Quick Sort
+    vector<int> randomizedArray = arr;   // Copy of the original array for randomized Quick Sort
+
+    int detComparisons = deterministicQuickSort(deterministicArray, 0, n - 1);
+    int rndComparisons = randomizedQuickSort(randomizedArray, 0, n - 1);
+
+    cout << "Deterministic Quick Sort Comparisons: " << detComparisons << endl;
+    cout << "Randomized Quick Sort Comparisons: " << rndComparisons << endl;
+
+    return 0;
+}

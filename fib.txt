@@ -1,0 +1,76 @@
+#include <iostream>  
+using namespace std;  
+int main() {  
+  int n1=0,n2=1,n3,i,number;    
+ cout<<"Enter the number of elements: ";    
+ cin>>number;    
+ cout<<n1<<" "<<n2<<" "; //printing 0 and 1    
+ for(i=2;i<number;++i) //loop starts from 2 because 0 and 1 are already printed    
+ {    
+  n3=n1+n2;    
+  cout<<n3<<" ";    
+  n1=n2;    
+  n2=n3;    
+ }    
+   return 0;  
+   } 
+
+
+////////////////////////////////////
+
+#include <iostream>
+using namespace std;
+
+void generateFibonacci(int n, int a, int b) {
+    if (n <= 0) {
+        return;
+    }
+    int fib = a + b;
+    cout << fib << " ";
+    generateFibonacci(n - 1, b, fib);
+}
+
+int main() {
+    int n;
+    cout << "Enter the value of n: ";
+    cin >> n;
+    
+    if (n >= 1) {
+        cout << "Fibonacci sequence up to " << n << ": ";
+        if (n == 1) {
+            cout << "0 ";
+        }
+        if (n == 2) {
+            cout << "1 ";
+        }
+        generateFibonacci(n - 2, 0, 1);
+        cout << std::endl;
+    } else {
+        cout << "Please enter a positive value for n." << endl;
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+// Fibonacci Series using Recursion
+// #include <bits/stdc++.h>
+// using namespace std;
+
+// int fib(int n)
+// {
+//     if (n <= 1)
+//    	 return n;
+//     return fib(n - 1) + fib(n - 2);
+// }
+
+// int main()
+// {
+//     int n = 5;
+//     cout << n << "th Fibonacci Number: " << fib(n);
+//     return 0;
+// }
